@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Confection Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for header */
+        .header {
+            background: linear-gradient(to right, #f472b6, #8b5cf6);
+        }
+        .header h1 {
+            font-family: 'Poppins', sans-serif;
+        }
+        .header p {
+            font-family: 'Poppins', sans-serif;
+        }
+        .nav-link {
+            font-family: 'Poppins', sans-serif;
+        }
+        .menu-section h2,
+        .about-us-section h2,
+        .reviews-section h2 {
+            font-family: 'Poppins', sans-serif;
+        }
+        .menu-section p,
+        .about-us-section p,
+        .reviews-section p {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Gallery Styles */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        .gallery-item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .gallery-item:hover .gallery-item-overlay {
+            opacity: 1;
+        }
+        .gallery-item-overlay-text {
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 0.5rem;
+            font-weight: bold;
+        }
+
+        /* Custom styles for enhanced text and borders */
+        .enhanced-section {
+            border: 2px solid #f0f0f0;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .enhanced-section h2 {
+            color: #e63946;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: -0.02em;
+        }
+
+        .enhanced-section p {
+            color: #555555;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 1.25rem;
+            text-align: center;
+            font-weight: 400;
+        }
+        .menu-section ul li{
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .menu-item {
+            /* display: none;  Hide all menu items initially */
+        }
+
+        .menu-item.show {
+            display: block; /* Show the current menu item */
+        }
+
+        /* Modified Menu Section Layout */
+        .vertical-menu {
+            display: flex;
+            flex-direction: column; /* Arrange items vertically */
+            gap: 1.5rem; /* Spacing between menu categories */
+        }
+
+        .menu-category {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .menu-category:hover {
+            transform: translateY(-0.5rem);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-category h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e63946;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .menu-category ul {
+            padding-left: 0; /* Remove default padding */
+            list-style: none; /* Remove list bullets */
+        }
+
+        .menu-category ul li {
+            padding: 1rem;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 0;
+        }
+        .menu-category ul li:last-child {
+            border-bottom: none;
+        }
+
+        .menu-category h4 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-category p.price {
+            font-size: 1rem;
+            color: #2a9d8f;
+            margin-bottom: 0.25rem;
+            font-weight: bold;
+        }
+
+        .menu-category p.description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 font-poppins">
+    <header class="header text-white py-6 shadow-md sticky top-0 z-10 rounded-md">
+        <div class="container mx-auto text-center">
+            <h1 class="text-3xl font-semibold">The Confection Connexion</h1>
+        </div>
+        <div class="container mx-auto text-center">
+            <p class="text-lg">Your Sweet Connection</p>
+            <nav class="mt-4">
+                <ul class="flex justify-center space-x-4">
+                    
+                    <li><a href="#home" class="nav-link hover:text-gray-200 no-underline font-semibold">Home</a></li>
+                    
+                    <li><a href="#about-us" class="nav-link hover:text-gray-200 no-underline font-semibold">About Us</a></li>
+                    
+                    <li><a href="#menu" class="nav-link hover:text-gray-200 no-underline font-semibold">Menu</a></li>
+                    
+                    <li><a href="#reviews" class="nav-link hover:text-gray-200 no-underline font-semibold">Reviews</a></li>
+                    
+                    <li><a href="#contact" class="nav-link hover:text-gray-200 no-underline font-semibold">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto mt-8 p-4">
+        <section id="home" class="enhanced-section text-center py-10 rounded-md">
+            <h2 class="text-2xl font-semibold mb-4">Welcome to a World of Sweetness</h2>
+            <p class="text-lg">
+                Step into The Confection Connexion, where every cake and cupcake is a masterpiece of
+                flavor and artistry. We pour our passion into creating delectable treats that
+                elevate your special moments into unforgettable memories.
+            </p>
+        </section>
+
+        <section id="about-us" class="enhanced-section about-us-section py-10 rounded-md">
+            <h2 class="text-2xl font-semibold  text-center mb-6">Our Story</h2>
+            <p class="text-lg text-center">
+                The Confection Connexion isn't just a bakery; it's a labor of love, a dream kneaded
+                into reality.  We believe that the finest ingredients, combined with
+                meticulous care and a sprinkle of magic, can create moments of pure
+                bliss.  Our commitment to quality and creativity shines through in every
+                bite, making us your perfect partner in celebrating life's sweetest occasions.
+            </p>
+        </section>
+
+        <section id="menu" class="enhanced-section menu-section py-10 rounded-md">
+            <h2 class="text-2xl font-semibold text-center mb-6">Tempting Treats</h2>
+            <p class="text-lg text-center mb-8">
+                Prepare your taste buds for an exquisite journey through our curated selection
+                of cakes and cupcakes.  Each creation is a symphony of flavors, baked
+                fresh daily with the finest ingredients and an abundance of love.
+            </p>
+            <div class="vertical-menu">
+                <div class="menu-category">
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">CUP CAKES</h3>
+                    
+                    <ul class="space-y-2">
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Gulab Jamun Cupcake</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 600.00</p>
+                            
+                            <p class="description text-xs text-gray-500">A fusion of Indian tradition and cupcake perfection.
+                                Gulab jamun infused into a moist cupcake, crowned with a swirl of thandai
+                                mousse frosting. Every bite is a celebration of flavor.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Biscoff Cupcakes</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 660.00</p>
+                            
+                            <p class="description text-xs text-gray-500">Aromatic vanilla sponge with a heart of Biscoff, topped
+                                with Biscoff frosting and a delicate Biscoff crumble. A truly addictive
+                                treat.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Chocolate Cupcakes</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 660.00</p>
+                            
+                            <p class="description text-xs text-gray-500">Rich, dark chocolate cupcakes enrobed in a luscious
+                                chocolate ganache. A pure indulgence for the chocolate
+                                connoisseur.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Red Velvet Cupcakes</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 720.00</p>
+                            
+                            <p class="description text-xs text-gray-500">A classic for a reason. Velvety smooth red velvet
+                                cupcakes with a tangy cream cheese frosting that melts in your mouth.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Vanilla Cupcakes</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 720.00</p>
+                            
+                            <p class="description text-xs text-gray-500">The epitome of simple elegance. Light and airy
+                                vanilla cupcakes with a swirl of sweet vanilla frosting.</p>
+                            
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div class="menu-category">
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Novelty Cakes</h3>
+                    
+                    <ul class="space-y-2">
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Dark Hazel</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 2,600.00</p>
+                            
+                            <p class="description text-xs text-gray-500">An intense symphony of chocolate and hazelnut.
+                                Layers of moist chocolate sponge, hazelnut mousse, crunchy roasted hazelnuts,
+                                and a decadent hazelnut ganache.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Brownie Cake</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 2,500.00</p>
+                            
+                            <p class="description text-xs text-gray-500">The ultimate indulgence for brownie lovers. Fudgy
+                                brownie cake layered with your choice of rich chocolate ganache or
+                                buttercream.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Chocolate Mocha</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 2,500.00</p>
+                            
+                            <p class="description text-xs text-gray-500">A coffee-infused delight. Espresso-soaked
+                                chocolate sponge layered with coffee mousse and enrobed in a smooth chocolate
+                                ganache.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Fresh Fruit Cake</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 2,500.00</p>
+                            
+                            <p class="description text-xs text-gray-500">A burst of freshness in every bite. Layers of
+                                vanilla sponge adorned with fresh seasonal fruits, a luscious berry compote,
+                                and light chantilly cream.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Lotus Biscoff Cake</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 2,500.00</p>
+                            
+                            <p class="description text-xs text-gray-500">A crowd-pleaser that never disappoints. Vanilla
+                                sponge layered with creamy Biscoff mousse, crunchy Biscoff biscuits, and a
+                                generous swirl of Biscoff buttercream.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Spiced Orange Cake</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 2,400.00</p>
+                            
+                            <p class="description text-xs text-gray-500">Aromatic and zesty. Spiced orange sponge layered
+                                with a tangy cream cheese frosting.</p>
+                            
+                        </li>
+                        
+                         <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Gulab Jamun Cake</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 2,500.00</p>
+                            
+                            <p class="description text-xs text-gray-500">A celebration of Indian flavors. Vanilla sponge
+                                layered with thandai mousse, soft gulab jamun pieces, and garnished with dried
+                                rose petals and pistachio nibs.</p>
+                            
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div class="menu-category">
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">CC Special</h3>
+                    
+                    <ul class="space-y-2">
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Fresh Fruit Cake</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 2,500.00</p>
+                            
+                            <p class="description text-xs text-gray-500">Layers of vanilla
+                                 sponge frosted with
+                                 fresh fruits, berry compote and chantilly
+                                 cream.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Gulab Jamun Cupcake</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 600.00</p>
+                            
+                            <p class="description text-xs text-gray-500">Gulab jamun cupcakes
+                                frosted with
+                                thandai
+                                mousse frosting.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Lotus Biscoff Cake</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 2,500.00</p>
+                            
+                            <p class="description text-xs text-gray-500">This one's a crowd
+                                favourite. Layers
+                                of
+                                vanilla sponge
+                                filled with biscoff mousse, crushed
+                                biscuits, biscoff
+                                 spread and
+                                frosted with biscoff buttercream.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                             <h4 class="text-md font-medium text-gray-700">Chocolate Fudge Brownies
+                                (Flavours available)</h4>
+                            
+                            <p class="price text-sm text-gray-600">₹ 900.00</p>
+                            
+                            <p class="description text-xs text-gray-500">Box of 6</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Gulab Jamun Cake</h4>
+                            
+                            <p class="text-sm text-gray-600">₹
+                                2,500.00</p>
+                            
+                            <p class="text-xs text-gray-500">Layers of vanilla
+                                sponge filled
+                                with thandai mousse frosting, gulab jamun pieces, dried rose
+                                petals and
+                                pistachio nibs.</p>
+                            
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div class="menu-category">
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Brownies</h3>
+                    
+                    <ul class="space-y-2">
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Biscoff
+                                Stuffed Brownies</h4>
+                            
+                            <p class="text-sm text-gray-600">₹ 840.00</p>
+                            
+                            <p class="text-xs text-gray-500">Brownie stuff with
+                                biscoff spread</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Assorted
+                                Brownie Box</h4>
+                            
+                            <p class="text-sm text-gray-600">₹ 960.00</p>
+                            
+                            <p class="text-xs text-gray-500">Toppings-:
+                                Nutella,biscoff,
+                                 oreo,walnut</p>
+                            
+                        </li>
+                        
+                         <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Chocolate
+                                Fudge Brownies (Flavours available)</h4>
+                            
+                            <p class="text-sm text-gray-600">₹ 900.00</p>
+                            
+                            <p class="text-xs text-gray-500">Box of 6</p>
+                            
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div class="menu-category">
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Tea
+                    Cakes</h3>
+                    
+                    <ul class="space-y-2">
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Upside
+                                Down Orange Cake</h4>
+                            
+                            <p class="text-sm text-gray-600">₹ 800.00</p>
+                            
+                            <p class="text-xs text-gray-500">Approximately 600
+                                grams.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Vanilla
+                                Almond Bundt Cake</h4>
+                            
+                            <p class="text-sm text-gray-600">₹
+                                1,500.00</p>
+                            
+                            <p class="text-xs text-gray-500">Approximately 1
+                                kg.</p>
+                            
+                        </li>
+                        
+                        <li>
+                            
+                            <h4 class="text-md font-medium text-gray-700">Lemon
+                                Bundt Cake</h4>
+                            
+                            <p class="text-sm text-gray-600">₹ 650.00</p>
+                            
+                            <p class="text-xs text-gray-500">Approximately 500
+                                grams. Lemon tea cake with lemon drizzle.</p>
+                            
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+            <p class="text-lg text-center mt-8 font-semibold">
+                *Prices are subject to change.  Please contact us for custom orders and
+                inquiries to create a cake that's uniquely yours.*
+            </p>
+        </section>
+
+        <section id="reviews" class="enhanced-section reviews-section py-10 rounded-md">
+            <h2 class="text-2xl font-semibold text-center mb-6">Customer Testimonials</h2>
+            <p class="text-lg text-center mb-8">
+                Don't just take our word for it.  Read what our delighted customers have
+                to say about their experience with The Confection Connexion, and share your own
+                sweet moments!
+            </p>
+            <div id="reviews-container" class="space-y-4">
+            </div>
+
+            <div id="review-form" class="bg-white rounded-lg shadow-md p-6
+                         mt-8 border border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Share Your Sweet Experience</h3>
+                <form id="add-review-form" class="space-y-4">
+                    
+                    <div>
+                        
+                        <label for="name" class="block text-gray-700 text-sm
+                                        font-bold mb-2">Your Name:</label>
+                        
+                        <input type="text" id="name" class="shadow
+                                        appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight
+                                        focus:outline-none focus:shadow-outline" required />
+                        
+                    </div>
+                    
+                    <div>
+                        
+                        <label for="rating" class="block text-gray-700 text-sm
+                                        font-bold mb-2">Rating:</label>
+                        
+                        <select id="rating" class="shadow appearance-none
+                                        border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none
+                                        focus:shadow-outline" required>
+                            <option value="5">★★★★★ (5 Stars)</option>
+                            <option value="4">★★★★☆ (4 Stars)</option>
+                            <option value="3">★★★☆☆ (3 Stars)</option>
+                            <option value="2">★★☆☆☆ (2 Stars)</option>
+                            <option value="1">★☆☆☆☆ (1 Star)</option>
+                        </select>
+                        
+                    </div>
+                    
+                    <div>
+                        
+                        <label for="review-text" class="block text-gray-700
+                                        text-sm font-bold mb-2">Your Review:</label>
+                        
+                        <textarea id="review-text" class="shadow
+                                        appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight
+                                        focus:outline-none focus:shadow-outline h-32 resize-y" required></textarea>
+                        
+                    </div>
+                    
+                    <button type="submit" class="bg-pink-500
+                                        hover:bg-pink-700 text-white font-bold py-2 px-4 rounded focus:outline-none
+                                        focus:shadow-outline">Add Review</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="contact" class="enhanced-section py-10 rounded-md">
+            <h2 class="text-2xl font-semibold text-center mb-6">Get in Touch</h2>
+            <p class="text-lg text-center mb-4">
+                We're here to make your sweet dreams a reality. Contact us today for bespoke
+                creations, inquiries, or to share your feedback and help us spread the
+                sweetness!
+            </p>
+            <div class="text-center text-lg">
+                <p>Address: P8JM+WXJ, Lawsons Bay Colony, Pedda Waltair, near
+                    Pedda Waltair Junction, Visakhapatnam, Andhra Pradesh, India</p>
+                <p>Phone: 8756309269, 6478364509</p>
+                <p>Opening Hours:</p>
+                <ul class="list-none">
+                    
+                    <li>Sunday: Closed</li>
+                    
+                    <li>Monday: 11AM-6PM</li>
+                    
+                    <li>Tuesday: 11AM-6PM</li>
+                    
+                    <li>Wednesday: 11AM-6PM</li>
+                    
+                    <li>Thursday: 11AM-6PM</li>
+                    
+                    <li>Friday: 11AM-6PM</li>
+                    
+                    <li>Saturday: 11AM-6PM</li>
+                </ul>
+                <p>Features: Takeaway</p>
+            </div>
+            <div class="mt-6">
+                 <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.284485309311!2d83.31347207455477!3d17.72242488311151!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a39c3b2f1f4b18d%3A0x925585f94b9875ec!2sLawsons%20Bay%20Colony%2C%20Pedda%20Waltair%2C%20Visakhapatnam%2C%20Andhra%20Pradesh%20530017!5e0!3m2!1sen!2sin!4v1708171764728!5m2!1sen!2sin"
+                    width="100%"
+                    height="300"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4 mt-8 rounded-md">
+        <div class="container mx-auto text-center">
+            <p>©
+                2024
+                The Confection Connexion. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    // Calculate the offsetTop, accounting for the header height.
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const offsetTop = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
+
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        const reviewsContainer = document.getElementById("reviews-container");
+        const addReviewForm = document.getElementById("add-review-form");
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        let reviews = [
+            {
+                name: "Janavi.I",
+                rating: 5,
+                reviewText: "The cakes from Confection Connexion are absolutelydelicious! Highly recommend the chocolate fudge brownies.",
+            },
+            {
+                name: "Kavya.K",
+                rating: 4,
+                reviewText: "I ordered a custom cake for my daughter's birthday, and it was both beautiful and tasty. Great service!",
+            },
+            {
+                name: "Anushka.S",
+                rating: 5,
+                reviewText: "The Gulab Jamun cake was a unique and delicious treat. I'll definitely be ordering again!",
+            },
+             {
+                name: "Rohan.M",
+                rating: 4,
+                reviewText: "I loved the Biscoff cupcakes! They were the perfect balance of sweet and crunchy.",
+            },
+            {
+                name: "Priya.R",
+                rating: 5,
+                reviewText: "The chocolate mocha cake was divine. Rich, flavorful, and incredibly satisfying.",
+            },
+        ];
+
+        function displayReviews() {
+            reviewsContainer.innerHTML = "";
+            reviews.forEach((review) => {
+                const reviewDiv = document.createElement("div");
+                reviewDiv.classList.add("bg-white", "rounded-md", "shadow-sm", "p-4", "border",
+                 "border-gray-200", "transition-all", "duration-300",
+                 "hover:shadow-lg", "hover:scale-[1.01]");
+                reviewDiv.innerHTML = `
+                        
+                            <strong class="font-bold text-gray-800">${review.name}</strong> -
+                            <span class="text-yellow-500">${getStarRating(review.rating)}</span>
+                            <p class="text-gray-700 mt-2 italic">"${review.reviewText}"</p>
+                        
+                `;
+                reviewsContainer.appendChild(reviewDiv);
+            });
+        }
+
+        function getStarRating(rating) {
+            let stars = "";
+            for (let i = 0; i < 5; i++) {
+                if (i < rating) {
+                    stars += "★";
+                } else {
+                    stars += "☆";
+                }
+            }
+            return stars;
+        }
+
+        addReviewForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const rating = parseInt(document.getElementById("rating").value);
+            const reviewText = document.getElementById("review-text").value;
+
+            if (name && rating && reviewText) {
+                const newReview = { name, rating, reviewText };
+                reviews.push(newReview);
+                displayReviews();
+                addReviewForm.reset();
+                alert("Thank you for your review!  We appreciate your sweet support.");
+            } else {
+                alert("Please fill in all fields to submit your review.");
+            }
+        });
+
+        displayReviews();
+
+        let currentMenuItemIndex = 0;
+
+        function showNextMenuItem() {
+            if (currentMenuItemIndex < menuItems.length) {
+                menuItems[currentMenuItemIndex].classList.add('show');
+                currentMenuItemIndex++;
+                if (currentMenuItemIndex < menuItems.length) {
+                    setTimeout(showNextMenuItem, 500);
+                }
+            }
+        }
+        showNextMenuItem();
+    </script>
+</body>
+</html>
